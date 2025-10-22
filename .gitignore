@@ -1,0 +1,49 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Model checkpoints
+checkpoints/
+models/*.pth
+models/*.pt
+models/*.ckpt
+
+# Large dataset folders
+data/
+*.nii
+*.nii.gz
+*.npy
+
+# Output plots or temp files
+*.png
+*.jpg
+*.pdf
+*.csv
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment files (optional)
+.env
