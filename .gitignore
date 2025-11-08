@@ -47,3 +47,4 @@ data/
 
 # Environment files (optional)
 .env
+global_latest.pth

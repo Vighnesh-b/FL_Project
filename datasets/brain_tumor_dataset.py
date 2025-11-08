@@ -1,10 +1,11 @@
 import os
 import numpy as np
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from monai.transforms import DivisiblePad
 from glob import glob
-from torch.utils.data import DataLoader
+from config import BASE_DIR
+
 
 class BrainTumor3DDataset(Dataset):
     def __init__(self, img_dir, mask_dir):
@@ -18,26 +19,34 @@ class BrainTumor3DDataset(Dataset):
     def __getitem__(self, idx):
         img = np.load(self.img_files[idx])
         mask = np.load(self.mask_files[idx])
+
+        # Reorder dimensions (assuming shape [H, W, D, C])
         img = np.transpose(img, (3, 2, 0, 1))
         mask = np.transpose(mask, (2, 0, 1))
         mask = np.expand_dims(mask, axis=0)
+
         img = torch.from_numpy(img).float()
         mask = torch.from_numpy(mask).float()
+
         img = self.pad(img)
         mask = self.pad(mask)
+
         return img, mask
-    
-def get_client_dataloaders(client_id, batch_size=1):
-    #BASE DIR NEEDS TO BE ADDED
-    BASE_DIR = ""
-    train_img = os.path.join(BASE_DIR, "Training", f"client_{client_id}", "images")
-    train_mask = os.path.join(BASE_DIR, "Training", f"client_{client_id}", "masks")
 
-    val_img = os.path.join(BASE_DIR, "Validation", f"client_{client_id}", "images")
-    val_mask = os.path.join(BASE_DIR, "Validation", f"client_{client_id}", "masks")
 
-    test_img = os.path.join(BASE_DIR, "Testing", f"client_{client_id}", "images")
-    test_mask = os.path.join(BASE_DIR, "Testing", f"client_{client_id}", "masks")
+def get_client_data(client_id, batch_size=1):
+
+    data_path=os.path.join(BASE_DIR,"data")
+    client_path=os.path.join(data_path,f"client_{client_id}")
+
+    train_img = os.path.join(client_path,"Training","images")
+    train_mask = os.path.join(client_path,"Training","masks")
+
+    val_img = os.path.join(client_path,"Validation","images")
+    val_mask = os.path.join(client_path,"Validation","masks")
+
+    test_img = os.path.join(client_path,"Testing","images")
+    test_mask = os.path.join(client_path,"Testing","masks")
 
     train_ds = BrainTumor3DDataset(train_img, train_mask)
     val_ds = BrainTumor3DDataset(val_img, val_mask)
