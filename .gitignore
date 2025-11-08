@@ -20,7 +20,7 @@ Thumbs.db
 # Logs
 logs/
 *.log
-
+global_models/
 # Model checkpoints
 checkpoints/
 models/*.pth
