@@ -2,7 +2,7 @@ import os
 import time
 import torch
 from models.unetr_model import get_unetr
-from utils.train_utils import train_one_epoch, evaluate
+from utils.train_utils import train_one_epoch, evaluate,combined_loss
 import config
 
 
@@ -19,7 +19,7 @@ class FederatedClient:
         self.train_loader, self.val_loader, self.test_loader = data
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=config.LEARNING_RATE)
-        self.criterion = torch.nn.BCEWithLogitsLoss()
+        self.criterion = combined_loss
 
     def load_global_model(self):
         while not os.path.exists(self.global_path):
