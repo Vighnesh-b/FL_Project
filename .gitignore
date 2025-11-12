@@ -49,3 +49,4 @@ data/
 .env
 global_latest.pth
 data.zip
+logs
