@@ -50,3 +50,5 @@ data/
 global_latest.pth
 data.zip
 logs
+
+frontend/build/

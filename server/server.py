@@ -49,6 +49,15 @@ class FederatedServer:
             os.remove(file)
         print("[Server] Cleared client updates.\n")
 
+    def initialize_global_model(self):
+        """Initialize and save the initial global model before first round."""
+        latest = os.path.join(self.global_dir, "global_latest.pth")
+        if not os.path.exists(latest):
+            torch.save(self.model.state_dict(), latest)
+            print("[Server] Initialized and saved initial global model.")
+        else:
+            print("[Server] Initial global model already exists.")
+
     def run_round(self, round_num):
         client_files = self.wait_for_all_clients(round_num)
         self.aggregate(client_files)
@@ -63,6 +72,9 @@ if __name__ == "__main__":
     NUM_CLIENTS = getattr(config, "NUM_CLIENTS", 4)
 
     server = FederatedServer(model_fn=get_unetr, shared_dir="shared", num_clients=NUM_CLIENTS)
+    
+    # Initialize global model before starting rounds
+    server.initialize_global_model()
 
     for r in range(CURRENT_ROUND, NUM_ROUNDS + 1):
         print(f"\n====================== ROUND {r} ======================")
